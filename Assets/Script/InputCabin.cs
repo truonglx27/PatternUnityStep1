@@ -1,34 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InputCabin : MonoBehaviour
 {
     public Transform parent;
-    public Sprite family;
-    // public List<Sprite> Sprites;
+    public Sprite sprite;
     public GameObject cainQuestion;
+    public Sprite spriteQuestion;
     private int numberCabin;
     private int speed;
-    public GameObject keyImage;
     bool checkedQuestion = false;
-
-
 
     void Start()
     {
         speed = -250;
         numberCabin = 6;
-        // this.gameObject.GetComponent<SpriteRenderer>().sprite = family;
-        // keyImage = GameObject.FindGameObjectWithTag("keyImage");
-        keyImage.GetComponent<>().sprite = family;
-
-        for (int i = 0; i < numberCabin - 1; i++)
+        for (int i = 0; i < numberCabin; i++)
         {
             Instantiate(cainQuestion, parent);
+            cainQuestion.transform.GetChild(0).GetComponent<Image>().sprite = sprite;
         }
-
-
+        parent.transform.GetChild(numberCabin + 1).GetChild(0)
+            .GetComponent<Image>().sprite = spriteQuestion;
     }
 
     void Update()
@@ -44,19 +39,24 @@ public class InputCabin : MonoBehaviour
                 parent.transform.Translate(speed * Time.deltaTime, 0.0f, 0.0f);
                 checkedQuestion = true;
                 StartCoroutine(ScalingImages());
-
             }
         }
     }
     private IEnumerator ScalingImages()
     {
+        int a = parent.transform.childCount;
         yield return new WaitForSeconds(.6f);
-        for (var i = 1; i < parent.transform.childCount; i++)
+        for (var i = 1; i < a; i++)
         {
-            parent.transform.GetChild(i).GetChild(0).localScale = new Vector3(1.2f, 1.2f, 1.2f);
-            yield return new WaitForSeconds(1.5f);
-            parent.transform.GetChild(i).GetChild(0).localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            yield return new WaitForSeconds(.2f);
+            if (i != a - 1)
+            {
+                parent.transform.GetChild(i).GetChild(0).localScale = new Vector3(1.2f, 1.2f, 1.2f);
+                yield return new WaitForSeconds(1f);
+                parent.transform.GetChild(i).GetChild(0).localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                yield return new WaitForSeconds(.2f);
+            }
+            else
+                parent.transform.GetChild(i).GetChild(0).localScale = new Vector3(1.2f, 1.2f, 1.2f);
         }
     }
     IEnumerator Example(float second)
@@ -65,8 +65,4 @@ public class InputCabin : MonoBehaviour
 
     }
 
-    // IEnumerator WaitItroGameRun(float second)
-    // {
-    //     yield return new WaitForSeconds(second);
-    // }
 }
