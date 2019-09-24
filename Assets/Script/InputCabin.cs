@@ -6,24 +6,28 @@ using UnityEngine.UI;
 public class InputCabin : MonoBehaviour
 {
     public Transform parent;
-    public Sprite sprite;
-    public GameObject cainQuestion;
+    // public Sprite sprite;
+    public List<Sprite> Sprites;
+    public GameObject cabin;
+    public GameObject cabinQuestion;
     public Sprite spriteQuestion;
     private int numberCabin;
     private int speed;
     bool checkedQuestion = false;
-
+    int[] numbers = { 0, 1, 2, 0, 1, 2 };
     void Start()
     {
         speed = -250;
         numberCabin = 6;
-        for (int i = 0; i < numberCabin; i++)
+        for (int i = 0; i < numberCabin - 1; i++)
         {
-            Instantiate(cainQuestion, parent);
-            cainQuestion.transform.GetChild(0).GetComponent<Image>().sprite = sprite;
+            Instantiate(cabin, parent);
         }
-        parent.transform.GetChild(numberCabin + 1).GetChild(0)
-            .GetComponent<Image>().sprite = spriteQuestion;
+        Instantiate(cabinQuestion, parent);
+        for (int i = 1, a = parent.transform.childCount; i < a - 1; i++)
+        {
+            parent.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = Sprites[numbers[i - 1]];
+        }
     }
 
     void Update()
